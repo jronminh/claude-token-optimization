@@ -45,4 +45,4 @@ fi
 
 echo "transcript: $LATEST"
 echo "tokens: $TOKENS"
-echo "(true window can't be determined from the transcript - run /context in-session for the exact percentage and window)"
+echo "(true window can't be determined from the transcript - no percentage/window is reported)"

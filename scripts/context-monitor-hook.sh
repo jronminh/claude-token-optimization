@@ -54,8 +54,8 @@ echo "$NEW_CKPT" > "$LAST_CKPT_FILE"
 
 LARGE=$(bash "$SCRIPT_DIR/find-large-turns.sh" "" 5 "$TRANSCRIPT" 2>/dev/null || true)
 
-CTX="Automatic context check (every $N tool calls): real token usage this session (exact, from API usage) just crossed ${NEW_CKPT} tokens (currently ~${TOKENS}). The true context window can't be determined from the transcript, so no percentage is given - tell the user this milestone directly and suggest they run /context themselves to see the real percentage and window. Biggest individual tool calls/messages by estimated token size:
+CTX="Automatic context check (every $N tool calls): real token usage this session (exact, from API usage) just crossed ${NEW_CKPT} tokens (currently ~${TOKENS}). The true context window can't be determined from the transcript, so no percentage is given - warn the user directly about this milestone. Biggest individual tool calls/messages by estimated token size:
 ${LARGE:-none found}"
 
-jq -n --arg ctx "$CTX" --arg msg "Context: just crossed ${NEW_CKPT} real tokens (~${TOKENS}). Run /context for the exact percentage and window." \
+jq -n --arg ctx "$CTX" --arg msg "Context: just crossed ${NEW_CKPT} real tokens (~${TOKENS})." \
   '{systemMessage: $msg, hookSpecificOutput: {hookEventName: "PostToolUse", additionalContext: $ctx}}'

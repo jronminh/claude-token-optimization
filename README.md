@@ -142,8 +142,8 @@ hadn't yet crossed 200k, so the heuristic picked the wrong window and was
 off by roughly 5x. There is no field in the transcript that records the
 real window size, so this can't be fixed by guessing better — only by not
 guessing. The current version reports the exact token count and which
-checkpoint was just crossed, and tells the user to run `/context`
-themselves for the real percentage.
+checkpoint was just crossed, as a plain warning, without suggesting the
+user run `/context` or any other next step.
 
 ### find-large-turns.sh
 

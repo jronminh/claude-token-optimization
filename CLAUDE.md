@@ -77,9 +77,8 @@ settings.json (hooks: matcher → command)
                                        │       threshold for everything
                                        └─ injects additionalContext: the
                                           checkpoint just crossed + the
-                                          list of heavy tool calls + a
-                                          suggestion to run /context
-                                          yourself (deliberately never
+                                          list of heavy tool calls, as a
+                                          warning (deliberately never
                                           guesses %/window - see below)
 ```
 
@@ -153,14 +152,15 @@ paid once. Three techniques, layered together:
 - **Reasoning/output**: concise and direct. No restating the question, no
   filler recaps.
 - **When `context-monitor-hook.sh` injects "just crossed Xk tokens"**:
-  tell the user directly in your reply, name the heaviest tool call(s)
-  `find-large-turns.sh` listed, and suggest they run `/context` themselves
-  for the real percentage/window before deciding on `/compact`. Don't
-  guess a percentage — there is no way to derive the real context window
+  warn the user directly in your reply with the token count, and name the
+  heaviest tool call(s) `find-large-turns.sh` listed. Don't suggest
+  running `/context` — don't guess a percentage either; there is no way
+  to derive the real context window
   from the transcript alone (a prior version of this hook guessed and was
   off by ~5x against a real `/context` reading on the same session; the
   current version reports only the exact token count and a checkpoint,
-  pushing the %/window question to `/context` itself).
+  as a plain warning, without pushing the user toward any particular
+  next step).
 - **When `check-md-size.sh` (Edit|Write branch) injects `THRESHOLD:
   CLAUDE.md user-editable content is ~N estimated tokens`**: prefer
   merging or trimming an existing bullet over appending a new one.
