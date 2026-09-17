@@ -26,7 +26,14 @@ echo "$FILE_PATH" >> "$LOG_FILE"
 [ "$PRIOR" -ge 1 ] || exit 0
 
 N=$(( PRIOR + 1 ))
-CTX="'$FILE_PATH' has already been Read $PRIOR time(s) earlier in this session (this will be read #$N). Prefer grep -n -A<N> -B<N> <anchor> to jump straight to the relevant section instead of re-reading the whole file, unless you're genuinely unsure of the file's current state (many turns since you last saw it, or it may have changed elsewhere)."
 
-jq -n --arg ctx "$CTX" --arg msg "File re-read #$N this session - prefer grep over reading it again." \
-  '{systemMessage: $msg, hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $ctx}}'
+# Exponential backoff: warn on read #2, #4, #8, #16... not every single
+# repeat - a file edited/reread many times in one session (observed: one
+# note file hit ~15 reads) doesn't need the identical warning re-injected
+# on every one once the point has already been made.
+(( (N & (N - 1)) == 0 )) || exit 0
+
+CTX="'$FILE_PATH': read #$N this session. Prefer grep -n -A<N> -B<N> <anchor> over a full re-Read."
+
+jq -n --arg ctx "$CTX" \
+  '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $ctx}}'
