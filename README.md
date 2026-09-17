@@ -239,4 +239,4 @@ actually gets injected into a user's `CLAUDE.md` every turn.
 
 ## License
 
-[MIT](./LICENSE)
+[GPL-3.0](./LICENSE)
