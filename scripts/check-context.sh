@@ -32,7 +32,7 @@ if [ -z "${LATEST:-}" ] || [ ! -f "$LATEST" ]; then
   exit 0
 fi
 
-USAGE_LINE=$(tac "$LATEST" 2>/dev/null | grep -m1 '"usage":{' || true)
+USAGE_LINE=$(tac "$LATEST" 2>/dev/null | awk '/"usage":\{/ && !/"model":"<synthetic>"/ { print; exit }' || true)
 TOKENS=0
 if [ -n "$USAGE_LINE" ]; then
   TOKENS=$(printf '%s' "$USAGE_LINE" | jq -r '
