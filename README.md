@@ -1,3 +1,8 @@
+> [!WARNING]
+> **Archived — superseded by [jronminh/token-optimization](https://github.com/jronminh/token-optimization).**
+> This repo's history was merged (git subtree) into `claude/` there. Use that
+> repo going forward; this one is kept read-only for reference.
+
 # claude-token-optimization
 
 Five [Claude Code](https://claude.com/claude-code) hooks that automatically
